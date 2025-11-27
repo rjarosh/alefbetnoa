@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="מילים עבריות">
+  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="icon" type="image/x-icon" href="icon.png">
+
+  
+  <title>מילים עבריות</title>
+  <style>
+
+    @font-face {
+    font-family: 'RobertsHebrew-Regular';
+    src: url('RobertsHebrew-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: sans-serif;
+      background: #55b562;
+      overflow:hidden;
+    }
+    #letter {
+      font-size: 7rem;
+      margin-bottom: 20px;
+      font-family: 'RobertsHebrew-Regular',sans-serif;
+      cursor: help;
+    }
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 3rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: none;
+      color: white;
+      display: inline-block;  
+    }
+    button:hover {
+      background: darkgreen;
+    }
+  </style>
+</head>
+<body>
+  <div id="letter"></div>
+  <div id="buttons">
+  <!-- <button id="playBtn">🔊</button> -->
+  <button id="nextBtn">⬅️</button>
+</div>
+  <script src="letters.js"></script>
+  <script>
+    const letterDiv = document.getElementById("letter");
+    // const playBtn = document.getElementById("playBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    let currentLetter = null;
+    let audio = null;
+
+    // pick a random letter
+    function getRandomLetter() {
+      const randomIndex = Math.floor(Math.random() * letters.length);
+      return letters[randomIndex];
+    }
+
+    // load a letter + its audio
+    function loadLetter() {
+      currentLetter = getRandomLetter();
+      letterDiv.textContent = currentLetter;
+      audio = new Audio(`audio/${currentLetter}.m4a`);
+
+      audio.onerror = function () {
+      // fallback to mp3 if m4a fails
+      audio = new Audio(`audio/${currentLetter}.mp3`);
+};
+
+    }
+
+    // play current letter sound
+    function playSound() {
+      if (audio) {
+        audio.currentTime = 0; // restart if pressed again
+        audio.play();
+      }
+    }
+
+    // events
+    // playBtn.addEventListener("click", playSound);
+    nextBtn.addEventListener("click", loadLetter);
+    letterDiv.addEventListener("click",playSound);
+
+    document.addEventListener('keydown',function(event) {
+      if (event.code === 'Space') {
+        event.preventDefault;
+        playSound();
+      } else if (event.code === 'ArrowLeft') {
+        loadLetter();
+      }
+    }
+
+      )
+
+    // initialize first letter on page load
+    window.onload = loadLetter;
+  </script>
+</body>
+</html>
